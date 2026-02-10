@@ -1,0 +1,129 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\title{\textbf{MyPolTracker: Nome a definir} \\ \large Conceito e Arquitetura}
+\author{O especialista?!}
+\date{10 de fevereiro de 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Dados Oficiais no Brasil}
+No Brasil há \textbf{dados oficiais, públicos e com API} mostrando \textbf{quem votou em quê}. Tudo mantido pelo próprio governo.
+
+\subsection{Câmara dos Deputados}
+\subsubsection{Portal e API}
+\begin{description}[style=nextline]
+    \item[Portal oficial] \url{https://www.camara.leg.br}
+    \item[API REST (aberta)] \url{https://dadosabertos.camara.leg.br/api/v2/}
+    \item[Formato] JSON
+\end{description}
+
+\subsubsection{Recursos Disponíveis}
+\begin{itemize}[leftmargin=*]
+    \item Votações nominais com voto individual de cada deputado
+    \item Opções de voto: Sim, Não, Abstenção, Obstrução, Ausente
+    \item Projetos, sessões, proposições, partidos e legislaturas
+\end{itemize}
+
+\subsubsection{Principais Endpoints}
+\begin{description}[font=\ttfamily]
+    \item[/votacoes] Lista todas as votações
+    \item[/votacoes/\{id\}/votos] Votos individuais de uma votação específica
+    \item[/proposicoes/\{id\}] Detalhes de uma proposição
+    \item[/deputados/\{id\}] Informações sobre um deputado
+\end{description}
+
+\subsection{Senado Federal}
+\subsubsection{Portal e API}
+\begin{description}[style=nextline]
+    \item[Portal oficial] \url{https://www25.senado.leg.br}
+    \item[API (dados abertos)] \url{https://www12.senado.leg.br/dados-abertos}
+    \item[Catalogo de APIs] \url{https://www12.senado.leg.br/dados-abertos/dados-abertos/catalogo-de-dados-abertos}
+    \item[Formatos] JSON ou XML
+\end{description}
+
+\subsubsection{Recursos Disponíveis}
+\begin{itemize}[leftmargin=*]
+    \item Votações no plenário com voto individual
+    \item Matérias, sessões e autores
+\end{itemize}
+
+\section{Funcionalidades Propostas}
+
+\subsection{Seguimento de Políticos}
+\paragraph{Quem seguir?}
+Deputados federais, senadores, governadores, prefeitos, vereadores
+
+\paragraph{O que acompanhar?}
+\begin{itemize}[leftmargin=*]
+    \item Votos nominais em tempo real
+    \item Alertas de novas votações
+    \item Mudanças de posicionamento
+\end{itemize}
+
+\subsection{Dados e Métricas}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Votações}
+    \begin{itemize}
+        \item Projetos de lei, PECs, MPVs
+        \item Filtros por tema: saúde, educação, segurança, meio ambiente, economia
+        \item Filtros por tipo de sessão: ordinárias, extraordinárias
+    \end{itemize}
+    
+    \item \textbf{Transparência}
+    \begin{itemize}
+        \item Salários e benefícios
+        \item Gastos públicos
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Visualizações}
+\begin{description}[leftmargin=*]
+    \item[Ementas] Resumo por tema/projeto com ementa e status
+    \item[Filtros partidários] Votações e votantes por partido e bancada
+    \item[Linha do tempo] Visualização cronológica de votações por período e tema
+    \item[Comparações] Análise de convergência entre políticos
+\end{description}
+
+\section{Arquitetura Técnica}
+
+\subsection{Backend}
+\subsubsection{Node.js + Express}
+\begin{itemize}[leftmargin=*]
+    \item Agendamento de tarefas para atualização periódica de dados
+    \item API REST para servir dados ao frontend
+    \item Persistência com Prisma + PostgreSQL
+\end{itemize}
+
+\subsubsection{Python (Microserviço, acho meio complexo)}
+\begin{itemize}[leftmargin=*]
+    \item Scraping e consumo de APIs externas
+    \item ETL (Extract, Transform, Load)
+    \item Processamento e limpeza de dados
+\end{itemize}
+\subsection{Chamadas de API}
+\subsubsection{Como?}
+Tem q ter em mente os limites a chamadas de api, se expandir, vai ter mta gente consumindo api q n é nossa.
+Talvez consumir as apis externas e popular um banco nosso? 
+\subsection{Perguntas}
+\begin{itemize}[leftmargin=*]
+    \item Separação entre coleta de dados (Python) e API de serviço (Node.js)
+    \item Cache para reduzir chamadas às APIs governamentais
+    \item Processamento assíncrono para grandes volumes
+\end{itemize}
+
+\end{document}
