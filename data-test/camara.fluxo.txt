@@ -1,0 +1,83 @@
+declaraçao de rotas:
+https://dadosabertos.camara.leg.br/swagger/api.html
+
+Dados foco e seus caminhos:
+Votação de politico especifo por tema
+1. Primeiro pegamos os temas
+https://dadosabertos.camara.leg.br/api/v2/votacoes
+formato de resposta json
+
+
+{
+  "id": "2487262-384",
+  "uri": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2487262-384",
+  "data": "2026-02-11",
+  "dataHoraRegistro": "2026-02-11T15:20:16",
+  "siglaOrgao": "SECAP(SGM)",
+  "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/100001",
+  "uriEvento": null,
+  "proposicaoObjeto": null,
+  "uriProposicaoObjeto": null,
+  "descricao": "Deferido o requerimento REQ 5786/2025 , nos termos do artigo 104, caput, do RICD",
+  "aprovacao": 1
+}
+
+
+2. Depois pegamos os votos de cada tema
+https://dadosabertos.camara.leg.br/api/v2/votacoes/2487262-384/votos
+formato de resposta json
+se vier vazio ("dados": []), significa q n e votação nominal, ou seja, n tem voto individualizado dos parlamentares
+https://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/guia-para-jornalistas/votacao
+
+n sei se ha outra forma de saber se e nominal ou n, no site 
+https://dadosabertos.camara.leg.br/howtouse/2020-02-07-dados-votacoes.html
+eles mencionam: 
+"Até o momento de publicação, não foi encontrada uma forma confiável de gerar um identificador estruturado do tipo de votação (simbólica, nominal, secreta, etc), 
+devido a diferenças significativas entre as bases que têm dados sobre votações."
+
+Ent surge o teste em python numero 1, ele roda pra pegar todas as votaçoes e verifica se elas recebem resposta diferente de 
+
+{
+  "dados": [],
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2566155-60/votos"
+    }
+  ]
+}
+
+
+
+Resultado do  teste
+
+{
+  "total_checked": 20,
+  "with_data": [],
+  "without_data": [
+    "2487262-384",
+    "2566155-60",
+    "2473101-36",
+    "2601493-2",
+    "2601082-2",
+    "2601080-2",
+    "2502815-23",
+    "2502809-23",
+    "2502795-23",
+    "2490361-24",
+    "2490332-23",
+    "2490326-23",
+    "2487945-25",
+    "2486620-23",
+    "2484224-23",
+    "2481978-25",
+    "2540857-26",
+    "2472872-40",
+    "2601502-3",
+    "2596244-3"
+  ]
+}
+
+em nenhum dos 20 casos testados, houve resposta diferente de vazio, ou seja, nenhuma votação nominal foi encontrada.
+
+talvez mto recente? talvez n tem mtas nominais?
